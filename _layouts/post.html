@@ -1,0 +1,33 @@
+---
+layout: default
+---
+<article class="paper">
+  <header class="paper-header">
+    <a class="back-link" href="{{ '/' | relative_url }}">← 목록으로</a>
+    <h1 class="paper-title">{{ page.title }}</h1>
+    <p class="paper-meta">
+      {%- if page.authors %}<span>{{ page.authors }}</span>{% endif -%}
+      {%- if page.venue %}<span>{{ page.venue }}{% if page.year %} {{ page.year }}{% endif %}</span>
+      {%- elsif page.year %}<span>{{ page.year }}</span>{% endif -%}
+      <span>읽은 날 {{ page.date | date: "%Y.%m.%d" }}</span>
+    </p>
+    {% if page.tags and page.tags.size > 0 %}
+    <p class="paper-tags">
+      {% for tag in page.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </p>
+    {% endif %}
+    {% if page.link %}
+    <p class="paper-link"><a href="{{ page.link }}" target="_blank" rel="noopener">원문 보기 ↗</a></p>
+    {% endif %}
+  </header>
+
+  <div class="paper-body">
+    {{ content }}
+  </div>
+</article>
+
+<!-- LaTeX 수식 렌더링: $...$ (인라인), $$...$$ (블록) -->
+<script>
+  MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>

@@ -1,0 +1,12 @@
+# 사이트 기본 정보 — 여기만 수정하면 사이드바에 반영됩니다
+title: Paper Log
+nickname: 닉네임            # 프로필 사진 아래에 표시될 이름
+description: 읽은 논문을 정리하고 기록하는 공간
+profile_image: /assets/img/profile.svg   # 본인 사진으로 교체: /assets/img/profile.jpg
+
+# 빌드 설정 (수정 불필요)
+markdown: kramdown
+highlighter: rouge
+permalink: /papers/:title/
+exclude:
+  - README.md

@@ -1,0 +1,301 @@
+/* ============================================
+   Paper Log — 디자인 토큰
+   배경은 종이, 글자는 잉크, 링크는 LaTeX hyperref 블루.
+   논문 제목은 학술 조판 느낌의 세리프(Source Serif 4),
+   한글 UI/본문은 Pretendard.
+   ============================================ */
+:root {
+  --paper: #FCFCFA;
+  --ink: #1C1C1C;
+  --ink-soft: #6E6E68;
+  --hairline: #E5E4DF;
+  --link-blue: #0F4C92;        /* 학술 PDF의 하이퍼링크 블루 */
+  --link-blue-hover: #0A3568;
+
+  --serif: "Source Serif 4", "Noto Serif KR", Georgia, serif;
+  --sans: "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif;
+
+  --sidebar-w: 240px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--link-blue); text-decoration: none; }
+a:hover { color: var(--link-blue-hover); }
+a:focus-visible {
+  outline: 2px solid var(--link-blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- 레이아웃 골격 ---------- */
+.shell {
+  display: flex;
+  min-height: 100vh;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- 좌측 사이드바 ---------- */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  padding: 72px 32px 48px 0;
+  border-right: 1px solid var(--hairline);
+  text-align: center;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+}
+
+.profile-photo {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border: 1px solid var(--hairline);
+}
+
+.nickname {
+  margin-top: 18px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.about-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 7px 22px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.about-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---------- 우측 콘텐츠 ---------- */
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 72px 0 96px 48px;
+}
+
+.db-header {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--hairline);
+}
+.db-title {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.db-count {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- 논문 리스트: 참고문헌처럼 ----------
+   번호는 최신 글이 큰 번호(reversed) = 지금까지 읽은 편수 */
+.paper-list {
+  list-style: none;
+  counter-reset: none;
+}
+
+.paper-entry {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.paper-entry a {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  column-gap: 8px;
+  padding: 18px 4px;
+  color: inherit;
+}
+
+.paper-entry a::before {
+  content: "[" counter(list-item) "]";
+  grid-row: 1 / span 2;
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  padding-top: 3px;
+}
+
+.entry-title {
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink);
+  transition: color 0.15s ease;
+}
+.paper-entry a:hover .entry-title { color: var(--link-blue); }
+
+.entry-meta {
+  grid-column: 2;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.entry-meta em { font-style: italic; }
+
+.empty-note {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  padding: 32px 0;
+}
+.empty-note code {
+  background: #F0EFEA;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+/* ---------- 논문 정리본 페이지 ---------- */
+.back-link {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.back-link:hover { color: var(--link-blue); }
+
+.paper-header {
+  margin: 18px 0 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.paper-title {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin-top: 14px;
+}
+
+.paper-meta {
+  margin-top: 12px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+.paper-meta span + span::before {
+  content: "·";
+  margin: 0 8px;
+}
+
+.paper-tags { margin-top: 12px; }
+.tag {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  color: var(--link-blue);
+  background: #EDF2F8;
+  border-radius: 999px;
+}
+
+.paper-link { margin-top: 14px; font-size: 0.88rem; }
+
+/* 정리본 본문 (md → HTML 변환 결과) */
+.paper-body { font-size: 1rem; }
+.paper-body h1, .paper-body h2, .paper-body h3 {
+  font-family: var(--serif);
+  letter-spacing: -0.01em;
+  margin: 2.2em 0 0.7em;
+  line-height: 1.4;
+}
+.paper-body h1 { font-size: 1.45rem; }
+.paper-body h2 { font-size: 1.25rem; }
+.paper-body h3 { font-size: 1.08rem; }
+.paper-body p { margin: 0.9em 0; }
+.paper-body ul, .paper-body ol { margin: 0.9em 0; padding-left: 1.5em; }
+.paper-body li { margin: 0.35em 0; }
+.paper-body img { max-width: 100%; border-radius: 6px; }
+.paper-body blockquote {
+  margin: 1.2em 0;
+  padding: 4px 18px;
+  border-left: 3px solid var(--link-blue);
+  color: #44443F;
+  background: #F6F6F2;
+}
+.paper-body code {
+  font-size: 0.88em;
+  background: #F0EFEA;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.paper-body pre {
+  margin: 1.2em 0;
+  padding: 16px 18px;
+  background: #1E1E1C;
+  color: #EDEDE8;
+  border-radius: 8px;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.paper-body pre code { background: none; padding: 0; color: inherit; }
+.paper-body table {
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  width: 100%;
+  font-size: 0.92rem;
+}
+.paper-body th, .paper-body td {
+  border: 1px solid var(--hairline);
+  padding: 8px 12px;
+  text-align: left;
+}
+.paper-body th { background: #F6F6F2; }
+.paper-body hr {
+  border: none;
+  border-top: 1px solid var(--hairline);
+  margin: 2.5em 0;
+}
+
+/* ---------- 모바일: 사이드바가 상단으로 ---------- */
+@media (max-width: 720px) {
+  .shell { flex-direction: column; padding: 0 20px; }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    padding: 40px 0 24px;
+    border-right: none;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .profile-photo { width: 96px; height: 96px; }
+
+  .content { padding: 36px 0 72px; }
+
+  .paper-entry a { grid-template-columns: 38px 1fr; }
+  .entry-title { font-size: 1.02rem; }
+}

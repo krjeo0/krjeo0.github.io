@@ -1,0 +1,26 @@
+---
+layout: default
+---
+<header class="db-header">
+  <h1 class="db-title">{{ site.title }}</h1>
+  <p class="db-count">읽은 논문 {{ site.posts | size }}편</p>
+</header>
+
+<ol class="paper-list" reversed>
+  {% for post in site.posts %}
+  <li class="paper-entry">
+    <a href="{{ post.url | relative_url }}">
+      <span class="entry-title">{{ post.title }}</span>
+      <span class="entry-meta">
+        {%- if post.authors %}{{ post.authors }}. {% endif -%}
+        {%- if post.venue %}<em>{{ post.venue }}</em>{% if post.year %} {{ post.year }}{% endif %}. {% elsif post.year %}{{ post.year }}. {% endif -%}
+        읽은 날 {{ post.date | date: "%Y.%m.%d" }}
+      </span>
+    </a>
+  </li>
+  {% endfor %}
+</ol>
+
+{% if site.posts == empty %}
+<p class="empty-note">아직 등록된 논문이 없습니다. <code>_posts</code> 폴더에 md 파일을 올리면 이곳에 나타납니다.</p>
+{% endif %}
