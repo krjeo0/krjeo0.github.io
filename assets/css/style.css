@@ -52,9 +52,9 @@ select:focus-visible {
 .shell {
   display: flex;
   width: 100%;
-  max-width: 1600px;
+  max-width: 2400px;
   margin: 0 auto;
-  padding: 0 clamp(24px, 4vw, 64px);
+  padding: 0 clamp(20px, 2.5vw, 48px);
   min-height: 100vh;
 }
 
@@ -105,7 +105,7 @@ select:focus-visible {
 .content {
   flex: 1;
   min-width: 0;
-  padding: 64px 0 96px clamp(32px, 4vw, 64px);
+  padding: 64px 0 96px clamp(32px, 3vw, 56px);
 }
 
 .db-header { margin-bottom: 20px; }
