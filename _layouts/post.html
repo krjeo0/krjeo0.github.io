@@ -14,7 +14,7 @@ layout: default
     </p>
     {% if page.tags and page.tags.size > 0 %}
     <p class="paper-tags">
-      {% for tag in page.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+      {% for tag in page.tags %}<a class="tag" href="{{ back_url | relative_url }}?tag={{ tag | uri_escape }}">{{ tag }}</a>{% endfor %}
     </p>
     {% endif %}
     {% if page.link %}

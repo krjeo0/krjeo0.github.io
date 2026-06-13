@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme') ||
+          (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | truncate: 160 }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,6 +46,8 @@
         <a class="nav-link{% if in_paperlog %} active{% endif %}" href="{{ '/' | relative_url }}">Paper Log</a>
         <a class="nav-link{% if in_mypapers %} active{% endif %}" href="{{ '/my-papers/' | relative_url }}">My Papers</a>
       </nav>
+
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">Dark mode</button>
     </aside>
 
     <main class="content{% if is_db %} content--db{% endif %}">
@@ -46,6 +57,23 @@
   </div>
 
   <script>
+  /* Theme: wire the light/dark toggle (the initial theme is set in <head>). */
+  (function () {
+    var btn = document.querySelector('.theme-toggle');
+    function label() {
+      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (btn) btn.textContent = dark ? 'Light mode' : 'Dark mode';
+    }
+    label();
+    if (btn) btn.addEventListener('click', function () {
+      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var next = dark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      label();
+    });
+  })();
+
   /* Manual page transition: fade the content out on an internal-link
      click, then navigate; the new page fades its content in on load.
      The sidebar is never touched, so the profile doesn't flicker. */

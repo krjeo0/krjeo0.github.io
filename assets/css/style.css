@@ -1,24 +1,58 @@
 /* ============================================
    Paper Log — design tokens
-   Paper background, ink text, hyperref-blue links.
+   Warm cream background, warm ink, terracotta accent —
+   a cozy nod to early Claude, but a touch earthier.
    Titles in an academic serif (Source Serif 4);
    data fields in mono to read like a catalog.
    ============================================ */
 :root {
-  --paper: #FCFCFA;
-  --ink: #1C1C1C;
-  --ink-soft: #6E6E68;
-  --hairline: #E5E4DF;
-  --row-hover: #F5F5F0;
-  --link-blue: #0F4C92;        /* the hyperlink blue of academic PDFs */
-  --link-blue-hover: #0A3568;
-  --chip: #EDF2F8;
+  --paper: #F5F0E6;            /* warm cream background */
+  --ink: #2C2823;              /* warm near-black */
+  --ink-soft: #79705F;         /* warm taupe */
+  --hairline: #E5DDCC;         /* warm tan rule */
+  --row-hover: #EDE6D6;        /* hover cream */
+  --accent: #AE5A37;           /* terracotta / clay */
+  --accent-hover: #8C4527;
+  --chip: #ECDDCB;             /* soft warm tint */
+  --panel: #EFE8D8;            /* subtle warm panel (quotes, table head) */
+  --quote-text: #574E40;
+  --code-bg: #2B2620;          /* code block */
+  --code-text: #EFEAE0;
+  --inline-code-bg: #ECE3D2;   /* inline code */
+  color-scheme: light;
 
   --serif: "Source Serif 4", Georgia, serif;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
 
   --sidebar-w: 220px;
+}
+
+/* warm dark theme — used when the user toggles, or as the system default */
+:root[data-theme="dark"] {
+  --paper: #22201A;            /* warm dark charcoal */
+  --ink: #EBE3D4;              /* warm cream text */
+  --ink-soft: #A2967F;         /* warm muted */
+  --hairline: #3B362D;
+  --row-hover: #2C2820;
+  --accent: #D2845A;           /* clay, brightened for dark */
+  --accent-hover: #E8A074;
+  --chip: #3A2E24;
+  --panel: #2A2620;
+  --quote-text: #C8BCA6;
+  --code-bg: #17140F;
+  --code-text: #EBE3D4;
+  --inline-code-bg: #322A20;
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+/* gentle fade when switching themes */
+body { transition: background-color 0.25s ease, color 0.25s ease; }
+.tag, .nav-link.active, .paper-db td,
+.paper-body pre, .paper-body code, .empty-note code,
+.paper-body blockquote, .paper-body th {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,13 +74,13 @@ body {
   overflow: hidden;
 }
 
-a { color: var(--link-blue); text-decoration: none; }
-a:hover { color: var(--link-blue-hover); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--link-blue);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -106,7 +140,7 @@ select:focus-visible {
   line-height: 1.7;
 }
 .social a { color: var(--ink-soft); white-space: nowrap; }
-.social a:hover { color: var(--link-blue); }
+.social a:hover { color: var(--accent); }
 .social a + a::before { content: "·"; margin: 0 7px; color: var(--ink-soft); }
 
 .side-nav {
@@ -217,14 +251,14 @@ select:focus-visible {
   letter-spacing: 0.07em;
   color: var(--ink-soft);
   padding: 11px 14px;
-  border-bottom: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink-soft);
   white-space: nowrap;
 }
 .paper-db th.sortable { cursor: pointer; user-select: none; }
 .paper-db th.sortable:hover { color: var(--ink); }
 .paper-db th .caret { font-size: 0.7rem; opacity: 0.4; }
 .paper-db th[aria-sort] { color: var(--ink); }
-.paper-db th[aria-sort] .caret { opacity: 1; color: var(--link-blue); }
+.paper-db th[aria-sort] .caret { opacity: 1; color: var(--accent); }
 
 .paper-db tbody td {
   padding: 13px 14px;
@@ -242,7 +276,7 @@ select:focus-visible {
 .col-id { width: 3.2rem; }
 .col-title { font-family: var(--serif); width: 42%; }
 .col-title a { color: var(--ink); font-weight: 600; line-height: 1.4; }
-.col-title a:hover { color: var(--link-blue); }
+.col-title a:hover { color: var(--accent); }
 .col-authors { color: var(--ink-soft); font-size: 0.86rem; }
 
 .tag {
@@ -250,18 +284,18 @@ select:focus-visible {
   margin: 0 4px 4px 0;
   padding: 2px 9px;
   font-size: 0.72rem;
-  color: var(--link-blue);
+  color: var(--accent-hover);
   background: var(--chip);
   border-radius: 999px;
   white-space: nowrap;
 }
 
 .empty-note { color: var(--ink-soft); font-size: 0.92rem; padding: 32px 0; }
-.empty-note code { background: #F0EFEA; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+.empty-note code { background: var(--inline-code-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
 
 /* ---------- paper summary page ---------- */
 .back-link { font-size: 0.85rem; color: var(--ink-soft); }
-.back-link:hover { color: var(--link-blue); }
+.back-link:hover { color: var(--accent); }
 
 .paper { max-width: 760px; }
 
@@ -300,16 +334,16 @@ select:focus-visible {
 .paper-body blockquote {
   margin: 1.2em 0;
   padding: 4px 18px;
-  border-left: 3px solid var(--link-blue);
-  color: #44443F;
-  background: #F6F6F2;
+  border-left: 3px solid var(--accent);
+  color: var(--quote-text);
+  background: var(--panel);
 }
-.paper-body code { font-family: var(--mono); font-size: 0.88em; background: #F0EFEA; padding: 2px 6px; border-radius: 4px; }
+.paper-body code { font-family: var(--mono); font-size: 0.88em; background: var(--inline-code-bg); padding: 2px 6px; border-radius: 4px; }
 .paper-body pre {
   margin: 1.2em 0;
   padding: 16px 18px;
-  background: #1E1E1C;
-  color: #EDEDE8;
+  background: var(--code-bg);
+  color: var(--code-text);
   border-radius: 8px;
   overflow-x: auto;
   line-height: 1.55;
@@ -317,7 +351,7 @@ select:focus-visible {
 .paper-body pre code { background: none; padding: 0; color: inherit; }
 .paper-body table { border-collapse: collapse; margin: 1.2em 0; width: 100%; font-size: 0.92rem; }
 .paper-body th, .paper-body td { border: 1px solid var(--hairline); padding: 8px 12px; text-align: left; }
-.paper-body th { background: #F6F6F2; }
+.paper-body th { background: var(--panel); }
 .paper-body hr { border: none; border-top: 1px solid var(--hairline); margin: 2.5em 0; }
 
 /* ---------- mobile: sidebar moves to top ---------- */
@@ -362,3 +396,26 @@ select:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .content, .content.is-leaving { animation: none !important; }
 }
+
+/* ---------- clickable tags + theme toggle ---------- */
+.col-tags .tag, .paper-tags a.tag { cursor: pointer; }
+.col-tags .tag:hover, .col-tags .tag:focus-visible,
+.paper-tags a.tag:hover, .paper-tags a.tag:focus-visible {
+  background: var(--accent);
+  color: var(--paper);
+}
+.db-search::placeholder { color: var(--ink-soft); opacity: 1; }
+
+.theme-toggle {
+  margin-top: 16px;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-soft); }

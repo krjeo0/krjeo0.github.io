@@ -38,7 +38,7 @@
         <td class="col-authors">{{ doc.authors | default: '—' }}</td>
         <td class="col-venue">{{ doc.venue | default: '—' }}</td>
         <td class="col-year">{{ doc.year | default: '—' }}</td>
-        <td class="col-tags">{% for tag in doc.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</td>
+        <td class="col-tags">{% for tag in doc.tags %}<span class="tag" data-tag="{{ tag | escape }}" role="button" tabindex="0">{{ tag }}</span>{% endfor %}</td>
         <td class="col-read">{{ doc.date | date: '%Y.%m.%d' }}</td>
       </tr>
       {% endfor %}
@@ -118,6 +118,33 @@
 
   headers.forEach(function (h) {
     if (h.dataset.sort === 'date') { h.setAttribute('aria-sort', 'descending'); h.querySelector('.caret').textContent = '▼'; }
+  });
+
+  function hasOption(sel, v) {
+    for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].value === v) return true; }
+    return false;
+  }
+
+  // Honor ?tag= / ?venue= from the URL (e.g., a tag clicked on a paper page)
+  var params = new URLSearchParams(location.search);
+  var qv = params.get('venue'); if (qv && hasOption(venueSel, qv)) venueSel.value = qv;
+  var qt = params.get('tag'); if (qt && hasOption(tagSel, qt)) tagSel.value = qt;
+  if (venueSel.value || tagSel.value) applyFilters();
+
+  // Click (or press Enter) a tag in the list to filter by it
+  function tagFromEvent(e) {
+    var t = e.target;
+    return (t && t.classList && t.classList.contains('tag')) ? t.getAttribute('data-tag') : null;
+  }
+  tbody.addEventListener('click', function (e) {
+    var tag = tagFromEvent(e);
+    if (tag && hasOption(tagSel, tag)) { tagSel.value = tag; applyFilters(); }
+  });
+  tbody.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      var tag = tagFromEvent(e);
+      if (tag && hasOption(tagSel, tag)) { e.preventDefault(); tagSel.value = tag; applyFilters(); }
+    }
   });
 })();
 </script>
