@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
@@ -16,7 +15,7 @@
 
     <aside class="sidebar">
       <a href="{{ '/' | relative_url }}" class="profile-link">
-        <img class="profile-photo" src="{{ site.profile_image | relative_url }}" alt="{{ site.nickname }} 프로필 사진">
+        <img class="profile-photo" src="{{ site.profile_image | relative_url }}" alt="{{ site.nickname }}">
       </a>
       <p class="nickname">{{ site.nickname }}</p>
       <a class="about-btn" href="{{ '/about/' | relative_url }}">About me</a>

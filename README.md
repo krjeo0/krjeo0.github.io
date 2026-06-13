@@ -1,40 +1,44 @@
-# Paper Log — 논문 정리 블로그
+# Paper Log — a paper-reading catalog
 
-GitHub Pages + Jekyll 기반. HTML은 건드릴 필요 없이 `_posts`에 md 파일만 올리면 글이 발행됩니다.
+Built on GitHub Pages + Jekyll. You never need to touch the HTML — just drop a
+markdown file into `_posts` and it's published.
 
-## 1. 최초 배포 (한 번만)
+## 1. First-time deploy (once)
 
-1. GitHub에서 새 저장소 생성 — 이름은 반드시 `본인아이디.github.io`
-2. 이 폴더의 내용 전체를 저장소에 push
-3. 저장소 **Settings → Pages** → Source를 `Deploy from a branch`, Branch를 `main`으로 설정
-4. 1~2분 뒤 `https://본인아이디.github.io` 접속
+1. Create a new GitHub repository named exactly `yourusername.github.io`
+2. Push everything in this folder to it (or drag the files in via the web UI)
+3. Repo **Settings → Pages** → Source `Deploy from a branch`, Branch `main`
+4. After a minute or two, open `https://yourusername.github.io`
 
-## 2. 처음에 바꿀 것
+## 2. Things to set first
 
-- `_config.yml` — `nickname`을 본인 이름으로
-- `assets/img/`에 본인 사진 업로드 후 `_config.yml`의 `profile_image` 경로 수정
-- `about.html` — 자기소개 작성
+- `_config.yml` — set `nickname` to your name
+- Upload your photo to `assets/img/` and update `profile_image` in `_config.yml`
+- `about.html` — write your bio
 
-## 3. 논문 정리본 올리기 (평소에 할 일)
+## 3. Adding a paper summary (the routine)
 
-`_posts/` 폴더에 아래 형식의 파일을 추가하고 push하면 끝.
+Add a file to `_posts/` and push. That's it.
 
-- 파일명: `YYYY-MM-DD-논문제목.md` (날짜 = 읽은 날)
-- 파일 맨 위 머리말:
+- Filename: `YYYY-MM-DD-paper-title.md` (date = the day you read it)
+- Front matter at the top of the file:
 
 ```yaml
 ---
 layout: post
-title: "논문 제목"
+title: "Paper title"
 date: 2026-06-12
-authors: "Vaswani et al."   # 선택
-venue: "NeurIPS"            # 선택
-year: 2017                  # 선택
-tags: [NLP, Transformer]    # 선택
-link: https://arxiv.org/... # 선택, 원문 링크
+authors: "Vaswani et al."   # optional
+venue: "NeurIPS"            # optional
+year: 2017                  # optional
+tags: [NLP, Transformer]    # optional
+link: https://arxiv.org/... # optional, link to the original
 ---
 ```
 
-머리말 아래에 일반 마크다운으로 정리본 작성. 수식은 `$...$` / `$$...$$`.
+Write the summary below in plain Markdown. Math uses `$...$` / `$$...$$`.
 
-샘플: `_posts/2026-06-12-attention-is-all-you-need.md`
+The fields above feed the table on the home page: `venue` and `tags` become
+filter options, and every column is sortable.
+
+Sample: `_posts/2026-06-12-attention-is-all-you-need.md`

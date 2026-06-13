@@ -3,13 +3,13 @@ layout: default
 ---
 <article class="paper">
   <header class="paper-header">
-    <a class="back-link" href="{{ '/' | relative_url }}">← 목록으로</a>
+    <a class="back-link" href="{{ '/' | relative_url }}">← Back to index</a>
     <h1 class="paper-title">{{ page.title }}</h1>
     <p class="paper-meta">
       {%- if page.authors %}<span>{{ page.authors }}</span>{% endif -%}
       {%- if page.venue %}<span>{{ page.venue }}{% if page.year %} {{ page.year }}{% endif %}</span>
       {%- elsif page.year %}<span>{{ page.year }}</span>{% endif -%}
-      <span>읽은 날 {{ page.date | date: "%Y.%m.%d" }}</span>
+      <span>Read {{ page.date | date: "%Y.%m.%d" }}</span>
     </p>
     {% if page.tags and page.tags.size > 0 %}
     <p class="paper-tags">
@@ -17,7 +17,7 @@ layout: default
     </p>
     {% endif %}
     {% if page.link %}
-    <p class="paper-link"><a href="{{ page.link }}" target="_blank" rel="noopener">원문 보기 ↗</a></p>
+    <p class="paper-link"><a href="{{ page.link }}" target="_blank" rel="noopener">View paper ↗</a></p>
     {% endif %}
   </header>
 
@@ -26,7 +26,7 @@ layout: default
   </div>
 </article>
 
-<!-- LaTeX 수식 렌더링: $...$ (인라인), $$...$$ (블록) -->
+<!-- LaTeX rendering: $...$ (inline), $$...$$ (block) -->
 <script>
   MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
 </script>

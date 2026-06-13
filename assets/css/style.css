@@ -1,21 +1,24 @@
 /* ============================================
-   Paper Log — 디자인 토큰
-   배경은 종이, 글자는 잉크, 링크는 LaTeX hyperref 블루.
-   논문 제목은 학술 조판 느낌의 세리프(Source Serif 4),
-   한글 UI/본문은 Pretendard.
+   Paper Log — design tokens
+   Paper background, ink text, hyperref-blue links.
+   Titles in an academic serif (Source Serif 4);
+   data fields in mono to read like a catalog.
    ============================================ */
 :root {
   --paper: #FCFCFA;
   --ink: #1C1C1C;
   --ink-soft: #6E6E68;
   --hairline: #E5E4DF;
-  --link-blue: #0F4C92;        /* 학술 PDF의 하이퍼링크 블루 */
+  --row-hover: #F5F5F0;
+  --link-blue: #0F4C92;        /* the hyperlink blue of academic PDFs */
   --link-blue-hover: #0A3568;
+  --chip: #EDF2F8;
 
-  --serif: "Source Serif 4", "Noto Serif KR", Georgia, serif;
-  --sans: "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif;
+  --serif: "Source Serif 4", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
 
-  --sidebar-w: 240px;
+  --sidebar-w: 220px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,22 +39,26 @@ body {
 
 a { color: var(--link-blue); text-decoration: none; }
 a:hover { color: var(--link-blue-hover); }
-a:focus-visible {
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
   outline: 2px solid var(--link-blue);
-  outline-offset: 3px;
+  outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* ---------- 레이아웃 골격 ---------- */
+/* ---------- shell: fluid, grows with the screen ---------- */
 .shell {
   display: flex;
-  min-height: 100vh;
-  max-width: 1080px;
+  width: 100%;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 clamp(24px, 4vw, 64px);
+  min-height: 100vh;
 }
 
-/* ---------- 좌측 사이드바 ---------- */
+/* ---------- left sidebar ---------- */
 .sidebar {
   width: var(--sidebar-w);
   flex-shrink: 0;
@@ -92,140 +99,147 @@ a:focus-visible {
   border-radius: 999px;
   transition: background 0.15s ease, color 0.15s ease;
 }
-.about-btn:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
+.about-btn:hover { background: var(--ink); color: var(--paper); }
 
-/* ---------- 우측 콘텐츠 ---------- */
+/* ---------- right content ---------- */
 .content {
   flex: 1;
   min-width: 0;
-  padding: 72px 0 96px 48px;
+  padding: 64px 0 96px clamp(32px, 4vw, 64px);
 }
 
-.db-header {
-  margin-bottom: 40px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--hairline);
-}
+.db-header { margin-bottom: 20px; }
 .db-title {
   font-family: var(--serif);
   font-size: 1.9rem;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
-.db-count {
-  margin-top: 6px;
+.db-sub { margin-top: 4px; font-size: 0.9rem; color: var(--ink-soft); }
+
+/* ---------- toolbar: search + filters + count ---------- */
+.db-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0;
+  margin-bottom: 0;
+}
+.db-search,
+.db-select,
+.db-clear {
+  font-family: var(--sans);
   font-size: 0.85rem;
-  color: var(--ink-soft);
-}
-
-/* ---------- 논문 리스트: 참고문헌처럼 ----------
-   번호는 최신 글이 큰 번호(reversed) = 지금까지 읽은 편수 */
-.paper-list {
-  list-style: none;
-  counter-reset: none;
-}
-
-.paper-entry {
-  border-bottom: 1px solid var(--hairline);
-}
-
-.paper-entry a {
-  display: grid;
-  grid-template-columns: 44px 1fr;
-  column-gap: 8px;
-  padding: 18px 4px;
-  color: inherit;
-}
-
-.paper-entry a::before {
-  content: "[" counter(list-item) "]";
-  grid-row: 1 / span 2;
-  font-family: var(--serif);
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  padding-top: 3px;
-}
-
-.entry-title {
-  font-family: var(--serif);
-  font-size: 1.12rem;
-  font-weight: 600;
-  line-height: 1.45;
   color: var(--ink);
-  transition: color 0.15s ease;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  padding: 8px 11px;
+  transition: border-color 0.15s ease;
 }
-.paper-entry a:hover .entry-title { color: var(--link-blue); }
-
-.entry-meta {
-  grid-column: 2;
-  margin-top: 4px;
-  font-size: 0.82rem;
+.db-search { flex: 1 1 240px; min-width: 180px; }
+.db-search:hover, .db-select:hover, .db-clear:hover { border-color: var(--ink-soft); }
+.db-select { cursor: pointer; }
+.db-clear { cursor: pointer; color: var(--ink-soft); }
+.db-clear:hover { color: var(--ink); }
+.result-count {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.78rem;
   color: var(--ink-soft);
+  white-space: nowrap;
 }
-.entry-meta em { font-style: italic; }
 
-.empty-note {
-  color: var(--ink-soft);
+/* ---------- the database table ---------- */
+.db-wrap { overflow-x: auto; }
+
+.paper-db {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 0.92rem;
-  padding: 32px 0;
-}
-.empty-note code {
-  background: #F0EFEA;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.85em;
 }
 
-/* ---------- 논문 정리본 페이지 ---------- */
-.back-link {
-  font-size: 0.85rem;
+.paper-db thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--paper);
+  text-align: left;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
   color: var(--ink-soft);
+  padding: 11px 14px;
+  border-bottom: 1.5px solid var(--ink);
+  white-space: nowrap;
 }
+.paper-db th.sortable { cursor: pointer; user-select: none; }
+.paper-db th.sortable:hover { color: var(--ink); }
+.paper-db th .caret { font-size: 0.7rem; opacity: 0.4; }
+.paper-db th[aria-sort] { color: var(--ink); }
+.paper-db th[aria-sort] .caret { opacity: 1; color: var(--link-blue); }
+
+.paper-db tbody td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+}
+.paper-db tbody tr:hover { background: var(--row-hover); }
+
+.col-id, .col-venue, .col-year, .col-read {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.col-id { width: 3.2rem; }
+.col-title { font-family: var(--serif); width: 42%; }
+.col-title a { color: var(--ink); font-weight: 600; line-height: 1.4; }
+.col-title a:hover { color: var(--link-blue); }
+.col-authors { color: var(--ink-soft); font-size: 0.86rem; }
+
+.tag {
+  display: inline-block;
+  margin: 0 4px 4px 0;
+  padding: 2px 9px;
+  font-size: 0.72rem;
+  color: var(--link-blue);
+  background: var(--chip);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.empty-note { color: var(--ink-soft); font-size: 0.92rem; padding: 32px 0; }
+.empty-note code { background: #F0EFEA; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+
+/* ---------- paper summary page ---------- */
+.back-link { font-size: 0.85rem; color: var(--ink-soft); }
 .back-link:hover { color: var(--link-blue); }
+
+.paper { max-width: 760px; }
 
 .paper-header {
   margin: 18px 0 40px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--hairline);
 }
-
 .paper-title {
   font-family: var(--serif);
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 600;
   line-height: 1.35;
   letter-spacing: -0.01em;
   margin-top: 14px;
 }
-
-.paper-meta {
-  margin-top: 12px;
-  font-size: 0.88rem;
-  color: var(--ink-soft);
-}
-.paper-meta span + span::before {
-  content: "·";
-  margin: 0 8px;
-}
-
+.paper-meta { margin-top: 12px; font-family: var(--mono); font-size: 0.82rem; color: var(--ink-soft); }
+.paper-meta span + span::before { content: "·"; margin: 0 8px; }
 .paper-tags { margin-top: 12px; }
-.tag {
-  display: inline-block;
-  margin-right: 6px;
-  padding: 3px 10px;
-  font-size: 0.75rem;
-  color: var(--link-blue);
-  background: #EDF2F8;
-  border-radius: 999px;
-}
-
 .paper-link { margin-top: 14px; font-size: 0.88rem; }
 
-/* 정리본 본문 (md → HTML 변환 결과) */
-.paper-body { font-size: 1rem; }
+.paper-body { font-size: 1.02rem; }
 .paper-body h1, .paper-body h2, .paper-body h3 {
   font-family: var(--serif);
   letter-spacing: -0.01em;
@@ -246,12 +260,7 @@ a:focus-visible {
   color: #44443F;
   background: #F6F6F2;
 }
-.paper-body code {
-  font-size: 0.88em;
-  background: #F0EFEA;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
+.paper-body code { font-family: var(--mono); font-size: 0.88em; background: #F0EFEA; padding: 2px 6px; border-radius: 4px; }
 .paper-body pre {
   margin: 1.2em 0;
   padding: 16px 18px;
@@ -262,40 +271,29 @@ a:focus-visible {
   line-height: 1.55;
 }
 .paper-body pre code { background: none; padding: 0; color: inherit; }
-.paper-body table {
-  border-collapse: collapse;
-  margin: 1.2em 0;
-  width: 100%;
-  font-size: 0.92rem;
-}
-.paper-body th, .paper-body td {
-  border: 1px solid var(--hairline);
-  padding: 8px 12px;
-  text-align: left;
-}
+.paper-body table { border-collapse: collapse; margin: 1.2em 0; width: 100%; font-size: 0.92rem; }
+.paper-body th, .paper-body td { border: 1px solid var(--hairline); padding: 8px 12px; text-align: left; }
 .paper-body th { background: #F6F6F2; }
-.paper-body hr {
-  border: none;
-  border-top: 1px solid var(--hairline);
-  margin: 2.5em 0;
-}
+.paper-body hr { border: none; border-top: 1px solid var(--hairline); margin: 2.5em 0; }
 
-/* ---------- 모바일: 사이드바가 상단으로 ---------- */
-@media (max-width: 720px) {
-  .shell { flex-direction: column; padding: 0 20px; }
-
+/* ---------- mobile: sidebar moves to top ---------- */
+@media (max-width: 760px) {
+  .shell { flex-direction: column; padding: 0 18px; }
   .sidebar {
     width: 100%;
     height: auto;
     position: static;
-    padding: 40px 0 24px;
+    padding: 36px 0 24px;
     border-right: none;
     border-bottom: 1px solid var(--hairline);
   }
   .profile-photo { width: 96px; height: 96px; }
+  .content { padding: 28px 0 64px; }
 
-  .content { padding: 36px 0 72px; }
+  .db-toolbar { align-items: stretch; }
+  .result-count { margin-left: 0; }
 
-  .paper-entry a { grid-template-columns: 38px 1fr; }
-  .entry-title { font-size: 1.02rem; }
+  /* drop lower-priority columns; table can still scroll sideways */
+  .col-id, .col-authors { display: none; }
+  .col-title { width: auto; }
 }
