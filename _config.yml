@@ -2,11 +2,20 @@
 title: Paper Log
 nickname: Your Name              # shown under the profile photo
 description: A catalog of papers I've read, with notes.
+bio: A short line about yourself.   # appears under your name
+instagram: yourhandle            # your Instagram handle, without the @ (leave blank to hide)
 profile_image: /assets/img/profile.svg   # replace with your photo: /assets/img/profile.jpg
 
 # Build settings (no need to touch)
 markdown: kramdown
 highlighter: rouge
-permalink: /papers/:title/
+permalink: /papers/:title/        # URL for reading-log entries (_posts)
+
+# A second, separate database for your own papers (_my_papers folder)
+collections:
+  my_papers:
+    output: true
+    permalink: /my-papers/:path/
+
 exclude:
   - README.md

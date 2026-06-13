@@ -1,0 +1,12 @@
+---
+layout: default
+title: My Papers
+permalink: /my-papers/
+---
+<header class="db-header">
+  <h1 class="db-title">My Papers</h1>
+  <p class="db-sub">Papers I've written.</p>
+</header>
+
+{% assign mydocs = site.my_papers | sort: 'date' | reverse %}
+{% include paper-table.html docs=mydocs folder="_my_papers" %}

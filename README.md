@@ -1,7 +1,7 @@
-# Paper Log — a paper-reading catalog
+# Paper Log — a paper-reading catalog + your own papers
 
-Built on GitHub Pages + Jekyll. You never need to touch the HTML — just drop a
-markdown file into `_posts` and it's published.
+Built on GitHub Pages + Jekyll. You never need to touch the HTML — just drop
+markdown files into the right folder and they're published.
 
 ## 1. First-time deploy (once)
 
@@ -10,18 +10,28 @@ markdown file into `_posts` and it's published.
 3. Repo **Settings → Pages** → Source `Deploy from a branch`, Branch `main`
 4. After a minute or two, open `https://yourusername.github.io`
 
-## 2. Things to set first
+## 2. Things to set first (in `_config.yml`)
 
-- `_config.yml` — set `nickname` to your name
-- Upload your photo to `assets/img/` and update `profile_image` in `_config.yml`
-- `about.html` — write your bio
+- `nickname` — your name
+- `bio` — the short line under your name
+- `instagram` — your handle without the @ (leave blank to hide)
+- `profile_image` — upload your photo to `assets/img/` and point to it
 
-## 3. Adding a paper summary (the routine)
+Also edit `about.html` to write your bio page.
 
-Add a file to `_posts/` and push. That's it.
+## 3. The two databases (this is the important part)
 
-- Filename: `YYYY-MM-DD-paper-title.md` (date = the day you read it)
-- Front matter at the top of the file:
+There are two table pages that look identical but pull from different folders:
+
+- **Paper Log** (home page) — papers you've read. Files go in `_posts/`.
+- **My Papers** (`/my-papers/`) — papers you've written. Files go in `_my_papers/`.
+
+The sidebar nav links to About me, Paper Log, and My Papers.
+
+### Adding to Paper Log (papers you read)
+
+Add a file to `_posts/` named `YYYY-MM-DD-title.md` (the date prefix is
+required by Jekyll and is treated as the day you read it):
 
 ```yaml
 ---
@@ -32,13 +42,31 @@ authors: "Vaswani et al."   # optional
 venue: "NeurIPS"            # optional
 year: 2017                  # optional
 tags: [NLP, Transformer]    # optional
-link: https://arxiv.org/... # optional, link to the original
+link: https://arxiv.org/... # optional
 ---
 ```
 
-Write the summary below in plain Markdown. Math uses `$...$` / `$$...$$`.
+### Adding to My Papers (papers you wrote)
 
-The fields above feed the table on the home page: `venue` and `tags` become
-filter options, and every column is sortable.
+Add a file to `_my_papers/` named `title.md` — **no date prefix here**, just a
+plain name. Put the date inside the front matter instead:
 
-Sample: `_posts/2026-06-12-attention-is-all-you-need.md`
+```yaml
+---
+layout: post
+title: "Your paper title"
+date: 2026-05-01            # used for ordering
+authors: "Your Name, Coauthor"
+venue: "CVPR"
+year: 2026
+tags: [Vision, Method]
+link: https://arxiv.org/...
+---
+```
+
+Write the summary below the front matter in plain Markdown. Math uses
+`$...$` / `$$...$$`. In both tables, `venue` and `tags` feed the filter
+dropdowns and every column is sortable.
+
+Samples to copy: `_posts/2026-06-12-attention-is-all-you-need.md` and
+`_my_papers/your-first-paper.md`.

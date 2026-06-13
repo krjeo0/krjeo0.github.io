@@ -1,15 +1,16 @@
 ---
 layout: default
 ---
+{% if page.collection == 'my_papers' %}{% assign back_url = '/my-papers/' %}{% assign back_label = 'Back to My Papers' %}{% else %}{% assign back_url = '/' %}{% assign back_label = 'Back to Paper Log' %}{% endif %}
 <article class="paper">
   <header class="paper-header">
-    <a class="back-link" href="{{ '/' | relative_url }}">← Back to index</a>
+    <a class="back-link" href="{{ back_url | relative_url }}">← {{ back_label }}</a>
     <h1 class="paper-title">{{ page.title }}</h1>
     <p class="paper-meta">
       {%- if page.authors %}<span>{{ page.authors }}</span>{% endif -%}
       {%- if page.venue %}<span>{{ page.venue }}{% if page.year %} {{ page.year }}{% endif %}</span>
       {%- elsif page.year %}<span>{{ page.year }}</span>{% endif -%}
-      <span>Read {{ page.date | date: "%Y.%m.%d" }}</span>
+      <span>{% if page.collection == 'my_papers' %}{{ page.date | date: "%Y.%m.%d" }}{% else %}Read {{ page.date | date: "%Y.%m.%d" }}{% endif %}</span>
     </p>
     {% if page.tags and page.tags.size > 0 %}
     <p class="paper-tags">

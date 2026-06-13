@@ -88,18 +88,38 @@ select:focus-visible {
   letter-spacing: -0.01em;
 }
 
-.about-btn {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 7px 22px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--ink);
-  border: 1px solid var(--ink);
-  border-radius: 999px;
+.bio {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.social {
+  margin-top: 9px;
+  font-size: 0.8rem;
+}
+.social a { color: var(--ink-soft); }
+.social a:hover { color: var(--link-blue); }
+
+.side-nav {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nav-link {
+  display: block;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  border-radius: 6px;
   transition: background 0.15s ease, color 0.15s ease;
 }
-.about-btn:hover { background: var(--ink); color: var(--paper); }
+.nav-link:hover { color: var(--ink); background: var(--row-hover); }
+.nav-link.active { color: var(--ink); font-weight: 600; background: var(--chip); }
 
 /* ---------- right content ---------- */
 .content {

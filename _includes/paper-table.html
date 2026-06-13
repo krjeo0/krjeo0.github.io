@@ -1,0 +1,123 @@
+{% assign docs = include.docs %}
+{% assign total = docs | size %}
+{% if total > 0 %}
+<div class="db-toolbar">
+  <input type="search" id="db-search" class="db-search" placeholder="Search title or author…" autocomplete="off" aria-label="Search papers">
+  <select id="db-venue" class="db-select" aria-label="Filter by venue"><option value="">All venues</option></select>
+  <select id="db-tag" class="db-select" aria-label="Filter by topic"><option value="">All topics</option></select>
+  <button id="db-clear" class="db-clear" type="button">Clear</button>
+  <span id="db-count" class="result-count">{{ total }} papers</span>
+</div>
+
+<div class="db-wrap">
+  <table class="paper-db" id="paper-db">
+    <thead>
+      <tr>
+        <th class="col-id sortable" data-sort="id" scope="col"># <span class="caret">↕</span></th>
+        <th class="col-title sortable" data-sort="title" scope="col">Title <span class="caret">↕</span></th>
+        <th class="col-authors sortable" data-sort="authors" scope="col">Authors <span class="caret">↕</span></th>
+        <th class="col-venue sortable" data-sort="venue" scope="col">Venue <span class="caret">↕</span></th>
+        <th class="col-year sortable" data-sort="year" scope="col">Year <span class="caret">↕</span></th>
+        <th class="col-tags" scope="col">Topics</th>
+        <th class="col-read sortable" data-sort="date" scope="col">Read <span class="caret">↕</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in docs %}
+      {% assign num = total | minus: forloop.index0 %}
+      <tr
+        data-id="{{ num }}"
+        data-title="{{ doc.title | downcase | escape }}"
+        data-authors="{{ doc.authors | downcase | escape }}"
+        data-venue="{{ doc.venue | escape }}"
+        data-year="{{ doc.year }}"
+        data-tags="{{ doc.tags | join: ',' | escape }}"
+        data-date="{{ doc.date | date: '%Y-%m-%d' }}">
+        <td class="col-id">{{ num }}</td>
+        <td class="col-title"><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></td>
+        <td class="col-authors">{{ doc.authors | default: '—' }}</td>
+        <td class="col-venue">{{ doc.venue | default: '—' }}</td>
+        <td class="col-year">{{ doc.year | default: '—' }}</td>
+        <td class="col-tags">{% for tag in doc.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</td>
+        <td class="col-read">{{ doc.date | date: '%Y.%m.%d' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="empty-note">No papers yet. Add a markdown file to the <code>{{ include.folder }}</code> folder and it will appear here.</p>
+{% endif %}
+
+<script>
+(function () {
+  var table = document.getElementById('paper-db');
+  if (!table) return;
+  var tbody = table.querySelector('tbody');
+  var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+  var search = document.getElementById('db-search');
+  var venueSel = document.getElementById('db-venue');
+  var tagSel = document.getElementById('db-tag');
+  var clearBtn = document.getElementById('db-clear');
+  var countEl = document.getElementById('db-count');
+  var headers = Array.prototype.slice.call(table.querySelectorAll('th.sortable'));
+
+  var venues = {}, tags = {};
+  rows.forEach(function (r) {
+    if (r.dataset.venue) venues[r.dataset.venue] = true;
+    (r.dataset.tags || '').split(',').forEach(function (t) { t = t.trim(); if (t) tags[t] = true; });
+  });
+  Object.keys(venues).sort().forEach(function (v) { venueSel.add(new Option(v, v)); });
+  Object.keys(tags).sort().forEach(function (t) { tagSel.add(new Option(t, t)); });
+
+  var sortKey = 'date', sortDir = -1;
+
+  function applyFilters() {
+    var q = search.value.trim().toLowerCase();
+    var fv = venueSel.value, ft = tagSel.value, shown = 0;
+    rows.forEach(function (r) {
+      var mq = !q || r.dataset.title.indexOf(q) > -1 || r.dataset.authors.indexOf(q) > -1;
+      var mv = !fv || r.dataset.venue === fv;
+      var mt = !ft || (r.dataset.tags || '').split(',').map(function (s) { return s.trim(); }).indexOf(ft) > -1;
+      var show = mq && mv && mt;
+      r.style.display = show ? '' : 'none';
+      if (show) shown++;
+    });
+    countEl.textContent = shown === rows.length ? rows.length + ' papers' : shown + ' of ' + rows.length + ' papers';
+  }
+
+  function val(r, k) {
+    if (k === 'year' || k === 'id') return parseInt(r.dataset[k], 10) || 0;
+    if (k === 'date') return r.dataset.date;
+    return r.dataset[k] || '';
+  }
+
+  function sortBy(key) {
+    if (key === sortKey) { sortDir *= -1; }
+    else { sortKey = key; sortDir = (key === 'year' || key === 'date' || key === 'id') ? -1 : 1; }
+    rows.slice().sort(function (a, b) {
+      var av = val(a, key), bv = val(b, key);
+      if (av < bv) return -sortDir;
+      if (av > bv) return sortDir;
+      return 0;
+    }).forEach(function (r) { tbody.appendChild(r); });
+    headers.forEach(function (h) {
+      var c = h.querySelector('.caret');
+      if (h.dataset.sort === sortKey) {
+        h.setAttribute('aria-sort', sortDir === 1 ? 'ascending' : 'descending');
+        c.textContent = sortDir === 1 ? '▲' : '▼';
+      } else { h.removeAttribute('aria-sort'); c.textContent = '↕'; }
+    });
+  }
+
+  headers.forEach(function (h) { h.addEventListener('click', function () { sortBy(h.dataset.sort); }); });
+  search.addEventListener('input', applyFilters);
+  venueSel.addEventListener('change', applyFilters);
+  tagSel.addEventListener('change', applyFilters);
+  clearBtn.addEventListener('click', function () { search.value = ''; venueSel.value = ''; tagSel.value = ''; applyFilters(); });
+
+  headers.forEach(function (h) {
+    if (h.dataset.sort === 'date') { h.setAttribute('aria-sort', 'descending'); h.querySelector('.caret').textContent = '▼'; }
+  });
+})();
+</script>

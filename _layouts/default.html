@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
+  {% assign in_about = false %}{% if page.url == '/about/' %}{% assign in_about = true %}{% endif %}
+  {% assign in_paperlog = false %}{% if page.url == '/' or page.collection == 'posts' %}{% assign in_paperlog = true %}{% endif %}
+  {% assign in_mypapers = false %}{% if page.url == '/my-papers/' or page.collection == 'my_papers' %}{% assign in_mypapers = true %}{% endif %}
+
   <div class="shell">
 
     <aside class="sidebar">
@@ -18,7 +22,14 @@
         <img class="profile-photo" src="{{ site.profile_image | relative_url }}" alt="{{ site.nickname }}">
       </a>
       <p class="nickname">{{ site.nickname }}</p>
-      <a class="about-btn" href="{{ '/about/' | relative_url }}">About me</a>
+      {% if site.bio %}<p class="bio">{{ site.bio }}</p>{% endif %}
+      {% if site.instagram %}<p class="social"><a href="https://instagram.com/{{ site.instagram }}" target="_blank" rel="noopener">@{{ site.instagram }}</a></p>{% endif %}
+
+      <nav class="side-nav">
+        <a class="nav-link{% if in_about %} active{% endif %}" href="{{ '/about/' | relative_url }}">About me</a>
+        <a class="nav-link{% if in_paperlog %} active{% endif %}" href="{{ '/' | relative_url }}">Paper Log</a>
+        <a class="nav-link{% if in_mypapers %} active{% endif %}" href="{{ '/my-papers/' | relative_url }}">My Papers</a>
+      </nav>
     </aside>
 
     <main class="content">
@@ -36,8 +47,6 @@
     if (!c) return;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Restore from the back/forward cache cleanly: drop any leftover
-    // exit state and replay the enter animation.
     window.addEventListener('pageshow', function (e) {
       c.classList.remove('is-leaving');
       if (e.persisted && !reduce) {
