@@ -28,29 +28,47 @@
   </div>
 
   <script>
-  /* Cross-document transition: morph the clicked paper title into the
-     summary-page heading (and back). Safe no-op where unsupported. */
+  /* Manual page transition: fade the content out on an internal-link
+     click, then navigate; the new page fades its content in on load.
+     The sidebar is never touched, so the profile doesn't flicker. */
   (function () {
-    function rowByUrl(url) {
-      var p;
-      try { p = new URL(url, location.href).pathname; } catch (e) { return null; }
-      var links = document.querySelectorAll('.paper-db a[href]');
-      for (var i = 0; i < links.length; i++) {
-        try { if (new URL(links[i].href).pathname === p) return links[i]; } catch (e) {}
+    var c = document.querySelector('.content');
+    if (!c) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Restore from the back/forward cache cleanly: drop any leftover
+    // exit state and replay the enter animation.
+    window.addEventListener('pageshow', function (e) {
+      c.classList.remove('is-leaving');
+      if (e.persisted && !reduce) {
+        c.style.animation = 'none';
+        void c.offsetWidth;
+        c.style.animation = '';
       }
-      return null;
-    }
-    window.addEventListener('pageswap', function (e) {
-      if (!e.viewTransition) return;
-      var dest = e.activation && e.activation.entry && e.activation.entry.url;
-      var a = dest && rowByUrl(dest);
-      if (a) a.style.viewTransitionName = 'paper-title';
     });
-    window.addEventListener('pagereveal', function (e) {
-      if (!e.viewTransition) return;
-      if (typeof navigation === 'undefined' || !navigation.activation || !navigation.activation.from) return;
-      var a = rowByUrl(navigation.activation.from.url);
-      if (a) a.style.viewTransitionName = 'paper-title';
+
+    if (reduce) return;
+
+    function internal(a) {
+      if (!a || a.target === '_blank' || a.hasAttribute('download')) return false;
+      var href = a.getAttribute('href');
+      if (!href || href.charAt(0) === '#') return false;
+      if (/^(mailto:|tel:|javascript:)/i.test(href)) return false;
+      try { if (new URL(a.href).origin !== location.origin) return false; }
+      catch (e) { return false; }
+      return true;
+    }
+
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest ? e.target.closest('a') : null;
+      if (!internal(a)) return;
+      e.preventDefault();
+      var href = a.href, done = false;
+      function go() { if (!done) { done = true; window.location.href = href; } }
+      c.addEventListener('animationend', go, { once: true });
+      setTimeout(go, 320);
+      c.classList.add('is-leaving');
     });
   })();
   </script>
