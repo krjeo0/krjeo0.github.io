@@ -26,5 +26,33 @@
     </main>
 
   </div>
+
+  <script>
+  /* Cross-document transition: morph the clicked paper title into the
+     summary-page heading (and back). Safe no-op where unsupported. */
+  (function () {
+    function rowByUrl(url) {
+      var p;
+      try { p = new URL(url, location.href).pathname; } catch (e) { return null; }
+      var links = document.querySelectorAll('.paper-db a[href]');
+      for (var i = 0; i < links.length; i++) {
+        try { if (new URL(links[i].href).pathname === p) return links[i]; } catch (e) {}
+      }
+      return null;
+    }
+    window.addEventListener('pageswap', function (e) {
+      if (!e.viewTransition) return;
+      var dest = e.activation && e.activation.entry && e.activation.entry.url;
+      var a = dest && rowByUrl(dest);
+      if (a) a.style.viewTransitionName = 'paper-title';
+    });
+    window.addEventListener('pagereveal', function (e) {
+      if (!e.viewTransition) return;
+      if (typeof navigation === 'undefined' || !navigation.activation || !navigation.activation.from) return;
+      var a = rowByUrl(navigation.activation.from.url);
+      if (a) a.style.viewTransitionName = 'paper-title';
+    });
+  })();
+  </script>
 </body>
 </html>
