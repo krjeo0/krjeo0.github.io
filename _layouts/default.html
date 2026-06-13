@@ -14,6 +14,7 @@
   {% assign in_about = false %}{% if page.url == '/about/' %}{% assign in_about = true %}{% endif %}
   {% assign in_paperlog = false %}{% if page.url == '/' or page.collection == 'posts' %}{% assign in_paperlog = true %}{% endif %}
   {% assign in_mypapers = false %}{% if page.url == '/my-papers/' or page.collection == 'my_papers' %}{% assign in_mypapers = true %}{% endif %}
+  {% assign is_db = false %}{% if page.url == '/' or page.url == '/my-papers/' %}{% assign is_db = true %}{% endif %}
 
   <div class="shell">
 
@@ -23,7 +24,13 @@
       </a>
       <p class="nickname">{{ site.nickname }}</p>
       {% if site.bio %}<p class="bio">{{ site.bio }}</p>{% endif %}
-      {% if site.instagram %}<p class="social"><a href="https://instagram.com/{{ site.instagram }}" target="_blank" rel="noopener">@{{ site.instagram }}</a></p>{% endif %}
+      {% if site.instagram or site.github or site.scholar %}
+      <p class="social">
+        {% if site.instagram %}<a href="https://instagram.com/{{ site.instagram }}" target="_blank" rel="noopener">@{{ site.instagram }}</a>{% endif %}
+        {% if site.github %}<a href="https://github.com/{{ site.github }}" target="_blank" rel="noopener">GitHub</a>{% endif %}
+        {% if site.scholar %}<a href="{{ site.scholar }}" target="_blank" rel="noopener">Scholar</a>{% endif %}
+      </p>
+      {% endif %}
 
       <nav class="side-nav">
         <a class="nav-link{% if in_about %} active{% endif %}" href="{{ '/about/' | relative_url }}">About me</a>
@@ -32,7 +39,7 @@
       </nav>
     </aside>
 
-    <main class="content">
+    <main class="content{% if is_db %} content--db{% endif %}">
       {{ content }}
     </main>
 
