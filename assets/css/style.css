@@ -19,6 +19,8 @@
   --code-bg: #2B2620;          /* code block */
   --code-text: #EFEAE0;
   --inline-code-bg: #ECE3D2;   /* inline code */
+  --scroll-thumb: #D8CDB7;     /* soft warm scrollbar handle */
+  --scroll-thumb-hover: #C3B596;
   color-scheme: light;
 
   --serif: "Source Serif 4", Georgia, serif;
@@ -43,6 +45,8 @@
   --code-bg: #17140F;
   --code-text: #EBE3D4;
   --inline-code-bg: #322A20;
+  --scroll-thumb: #423C32;
+  --scroll-thumb-hover: #564C3E;
   color-scheme: dark;
 }
 :root[data-theme="light"] { color-scheme: light; }
@@ -419,3 +423,68 @@ select:focus-visible {
   transition: border-color 0.15s ease, color 0.15s ease;
 }
 .theme-toggle:hover { color: var(--ink); border-color: var(--ink-soft); }
+
+/* ---------- soft, hover-revealed scrollbars (Notion-like) ----------
+   Transparent track that blends into the background; a rounded warm
+   handle that stays hidden until the pointer is over the scrolling
+   area; no up/down arrow buttons. */
+.db-wrap, .content, .sidebar, .paper-body pre {
+  scrollbar-width: thin;                          /* Firefox */
+  scrollbar-color: transparent transparent;
+}
+.db-wrap:hover, .db-wrap:focus-within,
+.content:hover, .content:focus-within,
+.sidebar:hover, .sidebar:focus-within,
+.paper-body pre:hover {
+  scrollbar-color: var(--scroll-thumb) transparent;
+}
+.db-wrap::-webkit-scrollbar,
+.content::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar,
+.paper-body pre::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.db-wrap::-webkit-scrollbar-track,
+.content::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track,
+.paper-body pre::-webkit-scrollbar-track,
+.db-wrap::-webkit-scrollbar-corner,
+.content::-webkit-scrollbar-corner,
+.sidebar::-webkit-scrollbar-corner,
+.paper-body pre::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* remove the up/down arrow buttons */
+.db-wrap::-webkit-scrollbar-button,
+.content::-webkit-scrollbar-button,
+.sidebar::-webkit-scrollbar-button,
+.paper-body pre::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.db-wrap::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb,
+.paper-body pre::-webkit-scrollbar-thumb {
+  background-color: transparent;                  /* hidden until hover */
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 999px;
+}
+.db-wrap:hover::-webkit-scrollbar-thumb,
+.db-wrap:focus-within::-webkit-scrollbar-thumb,
+.content:hover::-webkit-scrollbar-thumb,
+.content:focus-within::-webkit-scrollbar-thumb,
+.sidebar:hover::-webkit-scrollbar-thumb,
+.sidebar:focus-within::-webkit-scrollbar-thumb,
+.paper-body pre:hover::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+}
+.db-wrap::-webkit-scrollbar-thumb:hover,
+.content::-webkit-scrollbar-thumb:hover,
+.sidebar::-webkit-scrollbar-thumb:hover,
+.paper-body pre::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-thumb-hover);
+}

@@ -1,10 +1,12 @@
 # Site basics — edit here and it updates the sidebar
 title: Paper Log
-nickname: Hyun Kim              # shown under the profile photo
+nickname: Your Name              # shown under the profile photo
 description: A catalog of papers I've read, with notes.
-bio: A travel to be a better me.   # appears under your name
-instagram: krjeo_            # your Instagram handle, without the @ (leave blank to hide)
-github: krjeo0               # your GitHub username (leave blank to hide)
+url: "https://yourusername.github.io"   # IMPORTANT for search engines: your site's address, no trailing slash
+author: Your Name
+bio: A short line about yourself.   # appears under your name
+instagram: yourhandle            # your Instagram handle, without the @ (leave blank to hide)
+github: yourhandle               # your GitHub username (leave blank to hide)
 scholar: https://scholar.google.com/citations?user=YOUR_ID   # full URL to your Scholar profile (leave blank to hide)
 profile_image: /assets/img/profile.svg   # replace with your photo: /assets/img/profile.jpg
 
@@ -18,6 +20,14 @@ collections:
   my_papers:
     output: true
     permalink: /my-papers/:path/
+
+# Generates /sitemap.xml for search engines (supported on GitHub Pages)
+plugins:
+  - jekyll-sitemap
+
+# SEO extras (optional)
+og_image:                       # e.g. /assets/img/og.png — a 1200x630 image for link previews
+google_site_verification:       # paste the token from Google Search Console's "HTML tag" method
 
 exclude:
   - README.md

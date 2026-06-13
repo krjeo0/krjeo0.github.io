@@ -70,3 +70,33 @@ dropdowns and every column is sortable.
 
 Samples to copy: `_posts/2026-06-12-attention-is-all-you-need.md` and
 `_my_papers/your-first-paper.md`.
+
+## 4. Getting found on Google (SEO)
+
+The site is built to be search-friendly: every page has a title, description,
+canonical URL, and social-share tags, plus an auto-generated sitemap and a
+robots.txt.
+
+**Required:** set `url` in `_config.yml` to your real address
+(e.g. `https://yourusername.github.io`, no trailing slash). The sitemap and
+canonical links use it to build absolute URLs.
+
+After you deploy:
+- Your sitemap is at `https://yourusername.github.io/sitemap.xml`
+- Your robots file is at `https://yourusername.github.io/robots.txt`
+
+**Tell Google directly (recommended, speeds things up):**
+1. Go to Google Search Console and add a property using your site URL.
+2. Choose the **HTML tag** verification method. Copy the token (the value
+   inside `content="..."`) and paste it into `google_site_verification` in
+   `_config.yml`, then redeploy. Search Console will then verify you.
+3. In Search Console, open **Sitemaps** and submit `sitemap.xml`.
+
+**Nice link previews (optional):** add a 1200x630 PNG to `assets/img/`, then set
+`og_image: /assets/img/og.png` in `_config.yml`. That image shows when your
+links are shared on social media or chat apps.
+
+Note: search engines crawl on their own schedule, so it can take days to a few
+weeks to appear, and Google decides what to index and how to rank it. The steps
+above make your site fully crawlable and submittable, which is everything you
+control from your side.
