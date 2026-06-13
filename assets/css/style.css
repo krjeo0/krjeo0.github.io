@@ -425,11 +425,13 @@ select:focus-visible {
 .theme-toggle:hover { color: var(--ink); border-color: var(--ink-soft); }
 
 /* ---------- soft, hover-revealed scrollbars (Notion-like) ----------
-   Transparent track that blends into the background; a rounded warm
-   handle that stays hidden until the pointer is over the scrolling
-   area; no up/down arrow buttons. */
+   Transparent track that blends into the page; a rounded warm handle
+   that fades in only while the pointer is over the scrolling area;
+   no up/down arrow buttons. */
+
+/* shared: Firefox styling + transparent track */
 .db-wrap, .content, .sidebar, .paper-body pre {
-  scrollbar-width: thin;                          /* Firefox */
+  scrollbar-width: thin;                           /* Firefox */
   scrollbar-color: transparent transparent;
 }
 .db-wrap:hover, .db-wrap:focus-within,
@@ -442,8 +444,8 @@ select:focus-visible {
 .content::-webkit-scrollbar,
 .sidebar::-webkit-scrollbar,
 .paper-body pre::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
 }
 .db-wrap::-webkit-scrollbar-track,
 .content::-webkit-scrollbar-track,
@@ -455,26 +457,45 @@ select:focus-visible {
 .paper-body pre::-webkit-scrollbar-corner {
   background: transparent;
 }
-/* remove the up/down arrow buttons */
-.db-wrap::-webkit-scrollbar-button,
-.content::-webkit-scrollbar-button,
-.sidebar::-webkit-scrollbar-button,
-.paper-body pre::-webkit-scrollbar-button {
+/* remove the arrow buttons (the top/bottom triangles), every variant */
+.db-wrap::-webkit-scrollbar-button, .db-wrap::-webkit-scrollbar-button:start, .db-wrap::-webkit-scrollbar-button:end,
+.content::-webkit-scrollbar-button, .content::-webkit-scrollbar-button:start, .content::-webkit-scrollbar-button:end,
+.sidebar::-webkit-scrollbar-button, .sidebar::-webkit-scrollbar-button:start, .sidebar::-webkit-scrollbar-button:end,
+.paper-body pre::-webkit-scrollbar-button, .paper-body pre::-webkit-scrollbar-button:start, .paper-body pre::-webkit-scrollbar-button:end {
   display: none;
   width: 0;
   height: 0;
 }
-.db-wrap::-webkit-scrollbar-thumb,
+
+/* the database list — a truly smooth fade.
+   Scrollbar pseudo-elements don't animate their own color, but a parent's
+   `color` does, and a box-shadow with no color falls back to `color`.
+   So we draw the handle with an inset box-shadow and animate `color`.
+   The child <table> re-asserts its text color so content stays visible. */
+.db-wrap {
+  color: transparent;
+  transition: color 0.4s ease;
+}
+.db-wrap > table { color: var(--ink); }
+.db-wrap:hover, .db-wrap:focus-within { color: var(--scroll-thumb); }
+.db-wrap::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 999px currentColor;      /* fills the handle */
+}
+.db-wrap::-webkit-scrollbar-thumb:hover {
+  box-shadow: inset 0 0 0 999px var(--scroll-thumb-hover);
+}
+
+/* the other scrolling areas — hover-reveal via background-color */
 .content::-webkit-scrollbar-thumb,
 .sidebar::-webkit-scrollbar-thumb,
 .paper-body pre::-webkit-scrollbar-thumb {
-  background-color: transparent;                  /* hidden until hover */
+  background-color: transparent;
   background-clip: padding-box;
-  border: 3px solid transparent;
+  border: 4px solid transparent;
   border-radius: 999px;
 }
-.db-wrap:hover::-webkit-scrollbar-thumb,
-.db-wrap:focus-within::-webkit-scrollbar-thumb,
 .content:hover::-webkit-scrollbar-thumb,
 .content:focus-within::-webkit-scrollbar-thumb,
 .sidebar:hover::-webkit-scrollbar-thumb,
@@ -482,7 +503,6 @@ select:focus-visible {
 .paper-body pre:hover::-webkit-scrollbar-thumb {
   background-color: var(--scroll-thumb);
 }
-.db-wrap::-webkit-scrollbar-thumb:hover,
 .content::-webkit-scrollbar-thumb:hover,
 .sidebar::-webkit-scrollbar-thumb:hover,
 .paper-body pre::-webkit-scrollbar-thumb:hover {
