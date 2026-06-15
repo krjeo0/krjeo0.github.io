@@ -27,7 +27,7 @@ plugins:
 
 # SEO extras (optional)
 og_image:                       # e.g. /assets/img/og.png — a 1200x630 image for link previews
-google_site_verification:       # paste the token from Google Search Console's "HTML tag" method
+google_site_verification: N7ptVreCiIYyekUUxYJ6Um7oTma-NYP6mVm4R-Dxd-4      # paste the token from Google Search Console's "HTML tag" method
 
 exclude:
   - README.md
