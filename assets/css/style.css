@@ -30,26 +30,27 @@
   --sidebar-w: 220px;
 }
 
-/* warm dark theme — used when the user toggles, or as the system default */
-:root[data-theme="dark"] {
-  --paper: #22201A;            /* warm dark charcoal */
-  --ink: #EBE3D4;              /* warm cream text */
-  --ink-soft: #A2967F;         /* warm muted */
-  --hairline: #3B362D;
-  --row-hover: #2C2820;
-  --accent: #D2845A;           /* clay, brightened for dark */
-  --accent-hover: #E8A074;
-  --chip: #3A2E24;
-  --panel: #2A2620;
-  --quote-text: #C8BCA6;
-  --code-bg: #17140F;
-  --code-text: #EBE3D4;
-  --inline-code-bg: #322A20;
-  --scroll-thumb: #423C32;
-  --scroll-thumb-hover: #564C3E;
-  color-scheme: dark;
+/* warm dark theme — follows the visitor's system setting automatically */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #22201A;            /* warm dark charcoal */
+    --ink: #EBE3D4;              /* warm cream text */
+    --ink-soft: #A2967F;         /* warm muted */
+    --hairline: #3B362D;
+    --row-hover: #2C2820;
+    --accent: #D2845A;           /* clay, brightened for dark */
+    --accent-hover: #E8A074;
+    --chip: #3A2E24;
+    --panel: #2A2620;
+    --quote-text: #C8BCA6;
+    --code-bg: #17140F;
+    --code-text: #EBE3D4;
+    --inline-code-bg: #322A20;
+    --scroll-thumb: #423C32;
+    --scroll-thumb-hover: #564C3E;
+    color-scheme: dark;
+  }
 }
-:root[data-theme="light"] { color-scheme: light; }
 
 /* gentle fade when switching themes */
 body { transition: background-color 0.25s ease, color 0.25s ease; }
@@ -401,7 +402,7 @@ select:focus-visible {
   .content, .content.is-leaving { animation: none !important; }
 }
 
-/* ---------- clickable tags + theme toggle ---------- */
+/* ---------- clickable tags ---------- */
 .col-tags .tag, .paper-tags a.tag { cursor: pointer; }
 .col-tags .tag:hover, .col-tags .tag:focus-visible,
 .paper-tags a.tag:hover, .paper-tags a.tag:focus-visible {
@@ -409,20 +410,6 @@ select:focus-visible {
   color: var(--paper);
 }
 .db-search::placeholder { color: var(--ink-soft); opacity: 1; }
-
-.theme-toggle {
-  margin-top: 16px;
-  font-family: var(--sans);
-  font-size: 0.8rem;
-  color: var(--ink-soft);
-  background: transparent;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-.theme-toggle:hover { color: var(--ink); border-color: var(--ink-soft); }
 
 /* ---------- soft, hover-revealed scrollbars (Notion-like) ----------
    Transparent track that blends into the page; a rounded warm handle
