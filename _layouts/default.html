@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% capture seo_title %}{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}{% endcapture %}
+  {% assign site_label = site.tab_title | default: site.title %}
+  {% capture seo_title %}{% if page.title %}{{ page.title }} · {{ site_label }}{% else %}{{ site_label }}{% endif %}{% endcapture %}
   {% assign seo_desc = page.description | default: page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 %}
   <title>{{ seo_title }}</title>
   <meta name="description" content="{{ seo_desc }}">
@@ -22,6 +23,8 @@
   <meta name="twitter:description" content="{{ seo_desc }}">
   {% if site.og_image %}<meta name="twitter:image" content="{{ site.og_image | absolute_url }}">{% endif %}
   {% if site.google_site_verification %}<meta name="google-site-verification" content="{{ site.google_site_verification }}">{% endif %}
+  {% assign fav = site.favicon | default: '/assets/favicon.svg' %}
+  <link rel="icon" href="{{ fav | relative_url }}"{% if fav contains '.svg' %} type="image/svg+xml"{% endif %}>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
