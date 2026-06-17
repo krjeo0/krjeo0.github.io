@@ -3,17 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script>
-    (function () {
-      try {
-        var pref = localStorage.getItem('theme') || 'system';
-        var dark = pref === 'dark' ||
-          (pref === 'system' && window.matchMedia &&
-           matchMedia('(prefers-color-scheme: dark)').matches);
-        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-      } catch (e) {}
-    })();
-  </script>
   {% capture seo_title %}{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}{% endcapture %}
   {% assign seo_desc = page.description | default: page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 %}
   <title>{{ seo_title }}</title>
@@ -65,8 +54,6 @@
         <a class="nav-link{% if in_paperlog %} active{% endif %}" href="{{ '/' | relative_url }}">Paper Log</a>
         <a class="nav-link{% if in_mypapers %} active{% endif %}" href="{{ '/my-papers/' | relative_url }}">My Papers</a>
       </nav>
-
-      <button class="theme-toggle" type="button" aria-label="Switch theme: System, Light, or Dark">System</button>
     </aside>
 
     <main class="content{% if is_db %} content--db{% endif %}">
@@ -76,35 +63,6 @@
   </div>
 
   <script>
-  /* Theme: System / Light / Dark. In System mode the page follows the OS
-     setting live; the initial theme is also resolved in <head> to avoid a flash. */
-  (function () {
-    var btn = document.querySelector('.theme-toggle');
-    var mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
-    function pref() { try { return localStorage.getItem('theme') || 'system'; } catch (e) { return 'system'; } }
-    function resolve(p) {
-      if (p === 'dark' || p === 'light') return p;
-      return (mq && mq.matches) ? 'dark' : 'light';
-    }
-    function apply() {
-      var p = pref();
-      document.documentElement.setAttribute('data-theme', resolve(p));
-      if (btn) btn.textContent = p === 'system' ? 'System' : (p === 'dark' ? 'Dark' : 'Light');
-    }
-    apply();
-    if (mq) {
-      var onChange = function () { if (pref() === 'system') apply(); };
-      if (mq.addEventListener) mq.addEventListener('change', onChange);
-      else if (mq.addListener) mq.addListener(onChange);
-    }
-    if (btn) btn.addEventListener('click', function () {
-      var order = ['system', 'light', 'dark'];
-      var next = order[(order.indexOf(pref()) + 1) % order.length];
-      try { localStorage.setItem('theme', next); } catch (e) {}
-      apply();
-    });
-  })();
-
   /* Manual page transition: fade the content out on an internal-link
      click, then navigate; the new page fades its content in on load.
      The sidebar is never touched, so the profile doesn't flicker. */
